@@ -1,0 +1,14 @@
+# Reiniciando as instancias
+# Fonte: https://docs.ansible.com/ansible/latest/modules/reboot_module.html
+---
+- hosts: all
+  gather_facts: False
+  remote_user: linux
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+   - name: Reiniciando todas as instancias
+     reboot: 
+#      reboot_timeout: 3600 # altrando o reboot      

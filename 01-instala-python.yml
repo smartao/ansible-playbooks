@@ -1,4 +1,4 @@
-# Validando se o host esta com o python instalado
+# Validando se o host esta com o python instalado, caso nao sera instalado
 ---
 
 - hosts: all
@@ -9,7 +9,7 @@
   become_method: sudo
 
   tasks:
-   - name: Install Python 2
+   - name: Verificando e insltanado python 2
      raw: test -e /usr/bin/python || (apt-get update && apt-get install -y python)
 
 

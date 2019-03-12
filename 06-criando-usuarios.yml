@@ -1,0 +1,39 @@
+# Criando usuario no servidor linux
+# Fontes
+# https://docs.ansible.com/ansible/latest/modules/user_module.html
+# https://serversforhackers.com/c/create-user-in-ansible
+#
+# Gerar senha criptografada usando o comando
+# mkpasswd --method=sha-512
+# https://is.gd/gnGsdQ
+---
+
+- hosts: all
+  gather_facts: False
+  remote_user: linux
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+   - name: Criando usuario brqssh com a senha padrao cloud
+     user:
+       name: brqssh
+       shell: /bin/bash
+       groups: sudo
+       append: yes
+       password: $6$iHNPjaMFmhS$zKw9MFHlW1LAR6dkl7SxU6W9RdwJ5vNVQd41Y9F3hpHG9zPL7ZrCl5gxTIy/FUwVsP0ar7gMtI1ahUiRXhkzP.
+
+   - name: Adicionando chave SSH para o brqssh
+     authorized_key:
+       user: brqssh
+       exclusive: False
+       key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+   - name: Criando usuario adicional com a senha padrao projetos
+     user:
+       name: user
+       shell: /bin/bash
+       groups: sudo
+       append: yes
+       password: $6$k.YV.Hf3/GFm$ySm9EHN1trtUkSiapVot4wkt3bLji4AZykNiQaRFWbgbWIwt0Az6SYWE4fKwVslFgPDuOPxoAdlJxNhAwlTZ3/

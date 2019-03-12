@@ -1,0 +1,40 @@
+# Instalando programas basicos
+# Fontes
+# https://docs.ansible.com/ansible/latest/modules/apt_module.html
+#
+---
+- hosts: all
+  gather_facts: False
+  remote_user: linux
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+   - name: Atualizando sourcelist 
+     apt: 
+       update_cache: yes
+
+   - name: Instalando pacotes basicos
+     apt: 
+      name: "{{ items }}" 
+      state: latest
+     vars: 
+        items:
+        - atop
+        - htop
+        - iotop
+        - iptraf-ng
+        - vim
+        - bc
+        - screen 
+        - bash-completion 
+        - less 
+        - bzip2 
+        - nmap 
+        - tcpdump 
+        - telnet 
+        - rsync 
+        - net-tools 
+        - traceroute
+        - whois 

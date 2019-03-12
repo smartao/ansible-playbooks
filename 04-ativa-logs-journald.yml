@@ -1,4 +1,4 @@
-# Ativando armazenamento de logs pós boot
+# Ativando armazenamento de logs do journald pos boot
 ---
 
 - hosts: all

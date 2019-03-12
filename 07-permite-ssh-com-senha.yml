@@ -1,0 +1,24 @@
+# Permitindo o login SSH usando senha
+# Fontes
+# https://docs.ansible.com/ansible/latest/modules/systemd_module.html
+---
+
+- hosts: all
+  gather_facts: False
+  remote_user: linux
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: Permitir o login SSH usando senha
+      replace:
+        path: /etc/ssh/sshd_config
+        regexp: '^ChallengeResponseAuthentication no'
+        replace: 'ChallengeResponseAuthentication yes'
+
+    - name: Reiniciando servico do SSH
+      systemd:
+        state: restarted
+        daemon_reload: yes
+        name: ssh

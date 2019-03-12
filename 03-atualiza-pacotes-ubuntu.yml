@@ -1,0 +1,16 @@
+# Atualizando todos os pacotes no ubuntu
+# Fontes
+# https://docs.ansible.com/ansible/latest/modules/apt_module.html
+---
+- hosts: all
+  gather_facts: False
+  remote_user: linux
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+   - name: Atulizando todos os pacotes
+     apt: 
+       update_cache: yes
+       upgrade: full

@@ -1,4 +1,6 @@
-# Instalando chave SSH do root para a mesmo do servidor
+# Instalando chave SSH do root para o servidor
+#Fontes
+#https://docs.ansible.com/ansible/latest/modules/authorized_key_module.html
 ---
 - hosts: all
   gather_facts: False

@@ -1,0 +1,27 @@
+# Removendo programas nao utilizados
+# Fontes
+# https://docs.ansible.com/ansible/latest/modules/apt_module.html
+#
+---
+- hosts: all
+  gather_facts: False
+  remote_user: linux
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+   - name: Removendo pacotes desnecessarios
+     apt: 
+      name: "{{ items }}" 
+      state: absent
+     vars: 
+        items:
+        - ed
+        - nano
+        - vim-tiny
+
+   - name: Limpando cache de pacotes
+     apt:
+      autoremove: yes
+      purge: yes

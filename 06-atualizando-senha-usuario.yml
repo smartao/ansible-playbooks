@@ -1,0 +1,34 @@
+# Atualizando senha do servidor linux
+# Fontes
+# https://docs.ansible.com/ansible/latest/modules/user_module.html
+# https://serversforhackers.com/c/create-user-in-ansible
+#
+# Gerar senha criptografada usando o comando
+# mkpasswd --method=sha-512
+# https://is.gd/gnGsdQ
+---
+
+- hosts: all
+  gather_facts: False
+  remote_user: linux
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+#   - name: Atualizando a senha do usuario linux por seguranca
+#     user:
+#       name: linux
+#       password: $6$PSkoyflU5ZBkg$QTAerv0VI32IFamKEcVnsEQRr7EDBGfeycYK.ACx6m/TBcz5LLc.a9c/H/EhCpuZpSwVzvlCScWu1gAnzzShM.
+
+   - name: Atualizando a senha do usuario user
+     user:
+       name: user
+       password: $6$cgOcfg3rHpkf6$BrrZVz7bB7WxStzOCwEH6FryoGfmgfks2XuDcwDZl2U7hN0HsrO4kUScCFUOLGF0Y8bb.hb19IUBJfPJZTg8k0
+
+#   - name: Adicionando chave SSH para o brqssh
+#     authorized_key:
+#       user: linux
+#       exclusive: False
+#       key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+

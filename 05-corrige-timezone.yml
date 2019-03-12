@@ -1,4 +1,6 @@
-# Corrigindo o TimeZone do host para SP
+# Corrigindo o TimeZone do host para America/SP
+# Fontes
+# https://docs.ansible.com/ansible/latest/modules/timezone_module.html
 ---
 
 - hosts: all

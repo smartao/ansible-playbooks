@@ -1,0 +1,20 @@
+# Personalizando configuracoes no arquivo /etc/bash.bashrc
+# Fontes
+# https://docs.ansible.com/ansible/latest/modules/blockinfile_module.html
+---
+
+- hosts: all
+  gather_facts: False
+  remote_user: linux
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: Configurando o arquivo /etc/bash.bashrc
+      blockinfile:
+        path: /etc/bash.bashrc
+        block: |
+          export HISTSIZE=2000
+          export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S"
+          export EDITOR=vim

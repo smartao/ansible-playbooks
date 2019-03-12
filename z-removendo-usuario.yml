@@ -1,0 +1,20 @@
+# Atualizando senha do servidor linux
+# Fontes
+# https://docs.ansible.com/ansible/latest/modules/user_module.html
+#
+---
+
+- hosts: all
+  gather_facts: False
+  remote_user: linux
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+   - name: Removendo o usuario "users"
+     user:
+       name: users
+       state: absent
+       remove: yes
+
