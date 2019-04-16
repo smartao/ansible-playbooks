@@ -1,0 +1,42 @@
+# Instalando programas basicos
+# Fontes
+# https://docs.ansible.com/ansible/latest/modules/mount_module.html
+---
+- hosts: all
+  gather_facts: True
+  remote_user: linux
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+   - name: Instalando pacote de NFS
+     apt: 
+      name: "{{ items }}" 
+      state: latest
+      update_cache: yes
+     vars: 
+        items:
+        - nfs-common
+
+   - name: Configurando o DNS do VOC
+     replace:
+       path: /etc/resolv.conf
+       regexp: 'nameserver 127.0.0.53'
+       replace: 'nameserver 100.125.1.22'
+
+   - name: Creates directory
+     file:
+       path: /nfs
+       state: directory
+       owner: root
+       group: root
+       mode: 0775
+
+   - name: Mount DVD read-only
+     mount:
+       path: /nfs
+       src: sfs-nas1.sa-brazil-1.telefonicaopencloud.com:/share-49c000f5 
+       fstype: nfs
+       opts: vers=3,timeo=600,nolock
+       state: mounted
