@@ -3,7 +3,7 @@
 # https://docs.ansible.com/ansible/latest/modules/apt_module.html
 ---
 - hosts: all
-  gather_facts: False
+  gather_facts: True
   remote_user: linux
   become: yes
   become_user: root

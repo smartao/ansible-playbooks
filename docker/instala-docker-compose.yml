@@ -1,0 +1,18 @@
+# Instalando o docker-compose
+#Fontes
+#https://is.gd/XlECwh << Error when installing docker-compose using ansible-playbook
+
+---
+- hosts: all
+  gather_facts: true
+  remote_user: linux
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+  - name: Ensure docker-compose is installed and available
+    get_url: 
+      url : https://github.com/docker/compose/releases/download/1.7.0-rc1/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}
+      dest: /usr/local/bin/docker-compose
+      mode: 'u+x,g+x'
