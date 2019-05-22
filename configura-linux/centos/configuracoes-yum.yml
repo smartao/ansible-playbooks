@@ -1,0 +1,25 @@
+- name: Desativando SELinux YUM
+  selinux:
+    state: disabled
+
+- name: Desativando servico do firewalld YUM
+  systemd:
+    enabled: no
+    state: stopped
+    name: firewalld
+
+- name: Configurando o vim YUM
+  blockinfile:
+    path: /etc/vimrc
+    marker: '" {mark} ANSIBLE MANAGED BLOCK "'
+    block: |
+      syntax on
+      set background=dark
+
+- name: Configurando o arquivo /etc/bash.bashrc YUM
+  blockinfile:
+    path: /etc/bashrc
+    block: |
+      export HISTSIZE=2000
+      export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S"
+      export EDITOR=vim

@@ -1,0 +1,49 @@
+---
+- hosts: all
+  gather_facts: True
+  remote_user: linux
+  become: yes
+  become_user: root
+  become_method: sudo
+  
+  vars:
+    tagocs: "SERVIDORES_BV"
+    timezone: "America/Sao_Paulo"
+    portassh: "2222"
+    
+  tasks:
+#    - name: Instalando pacotes Ubuntu/Debian
+#      import_tasks: ubuntu/pacotes-apt.yml
+#      when: ansible_pkg_mgr == 'apt'
+    
+#    - name: Instalando pacotes CentOS/RedHat
+#      import_tasks: centos/pacotes-yum.yml
+#      when: ansible_pkg_mgr == 'yum'
+    
+    - name: Tarefas especificas para o Ubuntu/Debian
+      import_tasks: ubuntu/configuracoes-apt.yml
+      when: ansible_pkg_mgr == 'apt'
+
+    - name: Tarefas especificas para o CentOS/RedHat 
+      import_tasks: centos/configuracoes-yum.yml
+      when: ansible_pkg_mgr == 'yum'
+    
+    - name: Instalando e configurando o SNMP
+      import_tasks: geral/configuracoes-snmp.yml
+
+    - name: Configurando logins para acesso
+      import_tasks: geral/configuracoes-logins.yml
+    
+    - name: Executando tarefas basicas
+      import_tasks: geral/configuracoes-basicas.yml
+    
+    - name: Configurando o SSH
+      import_tasks: geral/configuracoes-ssh.yml
+    
+    - name: Instalando o OCS Ubuntu/Debian
+      import_tasks: ubuntu/configuracoes-ocs-apt.yml
+      when: ansible_pkg_mgr == 'apt'
+    
+    - name: Instalando o OCS CentOS/RedHat
+      import_tasks: centos/configuracoes-ocs-yum.yml
+      when: ansible_pkg_mgr == 'yum'

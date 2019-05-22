@@ -1,0 +1,66 @@
+- name: Login Criando o grupo sudo
+  group:
+    name: sudo
+    state: present
+
+- name: Login Criando o grupo administrator
+  group: 
+    name: administrator
+    state: present
+
+- name: Login Atualizando senha do root
+  user:
+    name: root
+    password: $6$Alxpfmw2epqX$sAM3BommVte4vQJwnTRAWv9mgqCDOU2ZHS3Xa1Pdwc3KMbhE53wk0SXUde//Xsb9LDPppYz3rteEHJxX2C4OK/
+
+- name: Login Criando usuario brqssh
+  user:
+    name: brqssh
+    shell: /bin/bash
+    groups: sudo,administrator
+    append: yes
+    password: $6$3diI6q4In3dMO$ydvQO7plrL6K5r2fZ5EUJwPafAyfwrabGED1HmqnXowQqG1rCDNMay2DJTrAGCr0u7IoYBe78OimhV6R7AfTu.
+
+- name: Login Removendo usuário brqssh do administrator
+  raw: gpasswd -d brqssh administrator
+
+- name: Login Criando usuario user
+  user:
+    name: user
+    shell: /bin/bash
+    groups: administrator
+    append: yes
+    password: $6$5BAiX3WLrgD$RatRZdHY/kXQFKF5B1tvSCLbpqspdtRQGHWKiTUt7i5WEpgx74xEolr.dt6N0GNl/XrKFGuyM5qUkFAMv0wHS.
+
+- name: Login Expirando a senha do user
+  raw: passwd -e user
+
+- name: Login Removendo configuracao legada do sudoers P1
+  lineinfile:
+    path: /etc/sudoers
+    state: absent
+    regex: "^Cmnd_Alias ADMIN_CMDS"
+
+- name: Login Removendo configuracao legada do sudoers P2
+  lineinfile:
+    path: /etc/sudoers
+    state: absent
+    regex: "^%administrator"
+
+- name: Login Criando arquivo de sudo BRQ
+  file:
+    path: /etc/sudoers.d/sudo-brq
+    state: touch
+    mode: 0440
+
+- name: Login Configurando sudoers novo padrao BRQ 
+  blockinfile:
+    path: /etc/sudoers.d/sudo-brq
+    block: |
+      Cmnd_Alias ADMIN_CMDS = /usr/bin/passwd, /usr/sbin/passwd, /usr/sbin/useradd, /usr/sbin/userdel, /usr/sbin/usermod, /usr/sbin/visudo
+      %administrator ALL=ALL, !ADMIN_CMDS
+      %sudo ALL=(ALL:ALL) ALL
+
+- name: Login Validando arquivos de sudoers
+  raw: visudo -c
+  ignore_errors: yes

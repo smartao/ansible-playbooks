@@ -1,0 +1,29 @@
+- name: SNMP Instalando pacote APT
+  apt:
+   name: "{{ items }}"
+   state: present
+  vars:
+     items:
+      - snmpd
+  when: ansible_pkg_mgr == 'apt'
+
+- name: SNMP Instalando pacote YUM
+  yum:
+   name: "{{ items }}"
+   state: present
+  vars:
+     items:
+      - net-snmp
+      - net-snmp-utils
+  when: ansible_pkg_mgr == 'yum'
+
+- name: SNMP Copiando arquivo
+  copy:
+    src: templates/snmpd.conf
+    dest: /etc/snmp/snmpd.conf
+
+- name: SNMP Reiniciando servico
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: snmpd

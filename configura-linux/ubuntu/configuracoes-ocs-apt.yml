@@ -1,0 +1,38 @@
+- name: OCS Instalando o pacote APT
+  apt:
+   name: "{{ items }}"
+   state: present
+   update_cache: yes
+  vars:
+     items:
+      - ocsinventory-agent
+  when: ansible_pkg_mgr == 'apt'
+
+- name: OCS Validando se existe o binario APT
+  stat: path=/usr/bin/ocsinventory-agent
+  register: ocsstatus
+
+- name: OCS Configurando APT
+  template:
+    src: templates/ocsinventory-agent.cfg
+    dest: /etc/ocsinventory/
+  when: ocsstatus.stat.exists
+
+- name: OCS Executando manualmente APT
+  raw: /usr/bin/ocsinventory-agent --debug
+  when: ocsstatus.stat.exists
+
+- name: OCS Criando crontab APT
+  file:
+    path: /etc/cron.d/ocs
+    state: touch
+    mode: 0644
+  when: ocsstatus.stat.exists
+
+- name: OCS Configurando crontab APT
+  blockinfile:
+    path: /etc/cron.d/ocs
+    block: |
+      PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+      0 * * * * root /usr/bin/ocsinventory-agent --debug --server=http://ocs.brq.com/ocsinventory > /dev/null 2>&1
+  when: ocsstatus.stat.exists

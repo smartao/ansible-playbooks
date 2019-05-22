@@ -1,0 +1,42 @@
+- name: SSH Adicionando chave SSH para o root
+  authorized_key: 
+    user: root
+    exclusive: False
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+#- name: Adicionando chave SSH para o brqssh
+#  authorized_key:
+#    user: brqssh
+#    exclusive: False
+#    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: SSH Permitir o login SSH usando senha
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: '^ChallengeResponseAuthentication no'
+    replace: 'ChallengeResponseAuthentication yes'
+
+- name: SSH Permitir o login SSH com o root
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin no'
+    replace: 'PermitRootLogin yes'
+ 
+- name: SSH Adicionando porta SSH para acesso externo
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: Port {{ portassh }}
+
+- name: SSH Reiniciando servico do SSH Ubuntu/Debian
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: ssh
+  when: ansible_pkg_mgr == 'apt'
+
+- name: SSH Reiniciando servico do SSH CentOS
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: sshd
+  when: ansible_pkg_mgr == 'yum'

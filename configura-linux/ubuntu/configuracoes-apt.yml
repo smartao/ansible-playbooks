@@ -1,0 +1,27 @@
+#- name: Fazendo backup do source list APT
+#  copy:
+#    src: /etc/apt/sources.list 
+#    dest: /etc/apt/sources.list.bkp
+#    remote_src: yes
+
+#- name: Copiando nova source list APT
+#  copy: 
+#    src: /usr/share/doc/apt/examples/sources.list 
+#    dest: /etc/apt/sources.list
+#    remote_src: yer
+
+- name: Configurando o vim APT
+  blockinfile:
+    path: /etc/vim/vimrc
+    marker: '" {mark} ANSIBLE MANAGED BLOCK "'
+    block: |
+      syntax on
+      set background=dark
+
+- name: Configurando o arquivo /etc/bash.bashrc APT
+  blockinfile:
+    path: /etc/bash.bashrc
+    block: |
+      export HISTSIZE=2000
+      export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S"
+      export EDITOR=vim

@@ -1,0 +1,46 @@
+- name: PKG Atualizando todos os pacotes APT
+  apt: 
+    update_cache: yes
+    upgrade: full
+
+- name: PKG Instalando pacotes basicos APT
+  apt: 
+   name: "{{ items }}" 
+   state: present
+  vars: 
+     items:
+     - atop
+     - bash-completion
+     - bc
+     - bzip2
+     - htop
+     - iotop
+     - iptraf-ng
+     - less
+     - net-tools
+     - nmap
+     - rsync
+     - screen
+     - snmpd
+     - sudo
+     - tcpdump
+     - telnet
+     - traceroute
+     - vim
+     - whois
+     - wget
+
+- name: PKG Removendo pacotes desnecessarios APT
+  apt: 
+   name: "{{ items }}" 
+   state: absent
+  vars: 
+     items:
+     - ed
+     - nano
+     - vim-tiny
+
+- name: PKG Limpando cache de pacotes APT
+  apt:
+   autoremove: yes
+   purge: yes

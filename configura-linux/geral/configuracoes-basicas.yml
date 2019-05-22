@@ -1,0 +1,9 @@
+- name: Ativar armazenamento de logs de boot journald
+  replace:
+    path: /etc/systemd/journald.conf
+    regexp: '^#Storage=auto'
+    replace: 'Storage=persistent'
+
+- name: Corrigindo TimeZone para SP
+  timezone:
+    name: '{{ timezone }}'

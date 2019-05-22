@@ -1,0 +1,40 @@
+#- name: PKG Atualizando todos os pacotes YUM
+#  yum: 
+#    update_cache: yes
+#    name: "*"
+#    state: latest
+
+- name: PKG Instalando pacotes basicos YUM
+  yum: 
+    name: "{{ items }}" 
+    state: present
+    update_cache: yes
+  vars: 
+     items:
+     - bash-completion
+     - bc
+     - bzip2
+     - iotop
+     - iptraf-ng
+     - less
+     - net-tools
+     - nmap
+     - rsync
+     - screen
+     - sudo
+     - tcpdump
+     - telnet
+     - traceroute
+     - vim
+     - whois
+     - wget
+
+- name: PKG Removendo pacotes desnecessarios YUM
+  yum: 
+    name: "{{ items }}" 
+    state: absent
+  vars: 
+     items:
+     - ed
+     - nano
+     - vim-tiny

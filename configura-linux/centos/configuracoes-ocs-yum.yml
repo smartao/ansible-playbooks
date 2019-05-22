@@ -1,0 +1,40 @@
+- name: OCS Instalando pacote remi-release YUM
+  yum:
+    name: http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+    state: present
+
+- name: OCS Instalando pacote epel-release7-11 YUM
+  yum:
+    name: http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
+    state: present
+
+- name: OCS Instalando pacotes YUM
+  raw: yum --enablerepo=remi install ocsinventory-reports ocsinventory-agent -y
+
+- name: OCS Validando se existe o binario do OCS YUM
+  stat: path=/usr/sbin/ocsinventory-agent
+  register: ocsstatus
+
+- name: OCS Configurando YUM
+  template:
+    src: templates/ocsinventory-agent.cfg 
+    dest: /etc/ocsinventory/
+  when: ocsstatus.stat.exists
+
+- name: OCS Executando manualmente YUM
+  raw: /usr/sbin/ocsinventory-agent --debug
+  when: ocsstatus.stat.exists
+
+- name: OCS Criando crontab
+  file:
+    path: /etc/cron.d/ocs
+    state: touch
+    mode: 0644
+  when: ocsstatus.stat.exists
+
+- name: OCS Configurando crontab YUM
+  blockinfile:
+    path: /etc/cron.d/ocs
+    block: |
+      PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+      0 * * * * root /usr/sbin/ocsinventory-agent --debug --server=http://ocs.brq.com/ocsinventory > /dev/null 2>&1 
