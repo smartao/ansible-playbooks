@@ -24,6 +24,7 @@
 
 - name: SNMP Reiniciando servico
   systemd:
+    enabled: yes
     state: restarted
     daemon_reload: yes
     name: snmpd

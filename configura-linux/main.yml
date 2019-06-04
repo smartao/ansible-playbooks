@@ -1,10 +1,10 @@
 ---
 - hosts: all
   gather_facts: True
-  remote_user: linux
-  become: yes
-  become_user: root
-  become_method: sudo
+#  remote_user: linux
+#  become: yes
+#  become_user: root
+#  become_method: sudo
   
   vars:
     tagocs: "SERVIDORES_BV"
@@ -12,13 +12,13 @@
     portassh: "2222"
     
   tasks:
-#    - name: Instalando pacotes Ubuntu/Debian
-#      import_tasks: ubuntu/pacotes-apt.yml
-#      when: ansible_pkg_mgr == 'apt'
+    - name: Instalando pacotes Ubuntu/Debian
+      import_tasks: ubuntu/pacotes-apt.yml
+      when: ansible_pkg_mgr == 'apt'
     
-#    - name: Instalando pacotes CentOS/RedHat
-#      import_tasks: centos/pacotes-yum.yml
-#      when: ansible_pkg_mgr == 'yum'
+    - name: Instalando pacotes CentOS/RedHat
+      import_tasks: centos/pacotes-yum.yml
+      when: ansible_pkg_mgr == 'yum'
     
     - name: Tarefas especificas para o Ubuntu/Debian
       import_tasks: ubuntu/configuracoes-apt.yml

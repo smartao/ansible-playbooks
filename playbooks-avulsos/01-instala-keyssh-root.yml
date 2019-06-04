@@ -1,10 +1,13 @@
 # Instalando chave SSH do root para o servidor
-#Fontes
-#https://docs.ansible.com/ansible/latest/modules/authorized_key_module.html
+# Exemplo de execucao
+# ansible-playbook 02-instala-keyssh-root.yml -i /tmp/hosts -k --ask-become-pass
+#
+# Fontes
+# https://docs.ansible.com/ansible/latest/modules/authorized_key_module.html
 ---
 - hosts: all
-  gather_facts: True
-  remote_user: linux
+  gather_facts: False
+  remote_user: brqssh
   become: yes
   become_user: root
   become_method: sudo

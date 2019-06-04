@@ -25,6 +25,11 @@
 - name: SSH Adicionando porta SSH para acesso externo
   lineinfile:
     path: /etc/ssh/sshd_config
+    line: Port 22
+
+- name: SSH Adicionando porta SSH para acesso externo
+  lineinfile:
+    path: /etc/ssh/sshd_config
     line: Port {{ portassh }}
 
 - name: SSH Reiniciando servico do SSH Ubuntu/Debian
