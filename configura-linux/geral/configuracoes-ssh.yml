@@ -32,6 +32,12 @@
     path: /etc/ssh/sshd_config
     line: Port {{ portassh }}
 
+- name: SSH Adicionando porta SSH para acesso externo
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: UseDNS no
+
+
 - name: SSH Reiniciando servico do SSH Ubuntu/Debian
   systemd:
     state: restarted
